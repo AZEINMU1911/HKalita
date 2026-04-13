@@ -1,1 +1,7 @@
+# env
+be/.env
+fe/.env.local
+
+# generated reports (keep the prompt files)
+reports
 .env
