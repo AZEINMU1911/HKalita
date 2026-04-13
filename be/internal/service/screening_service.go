@@ -23,15 +23,7 @@ func NewScreeningService(db *gorm.DB) *ScreeningService {
 }
 
 func (s *ScreeningService) Submit(req model.ScreeningRequest) (*model.Screening, error) {
-	result := s.ComputeResult(req.Answers)
-
-	score := 0
-	for _, v := range req.Answers {
-		if v {
-			score++
-		}
-	}
-
+	result, score := s.ComputeResult(req.Answers)
 	answersJSON, err := json.Marshal(req.Answers)
 	if err != nil {
 		return nil, err
@@ -63,7 +55,7 @@ func (s *ScreeningService) Submit(req model.ScreeningRequest) (*model.Screening,
 	return screening, nil
 }
 
-func (s *ScreeningService) ComputeResult(answers map[string]bool) string {
+func (s *ScreeningService) ComputeResult(answers map[string]bool) (string, int) {
 	var q1Config model.ScreeningConfig
 	var thresholdConfig model.ScreeningConfig
 
@@ -84,10 +76,18 @@ func (s *ScreeningService) ComputeResult(answers map[string]bool) string {
 	}
 
 	if q1AutoSuspek && answers["q1"] {
-		return "suspek"
+		return "suspek", score
 	}
 	if score >= threshold {
-		return "suspek"
+		return "suspek", score
 	}
-	return "risiko_rendah"
+	return "risiko_rendah", score
+}
+
+func (s *ScreeningService) GetByID(id string) (*model.Screening, error) {
+	return s.repo.FindByID(id)
+}
+
+func (s *ScreeningService) ListAll(result string, from string, to string, page int, limit int) ([]model.Screening, int64, error) {
+	return s.repo.ListAll(result, from, to, page, limit)
 }
