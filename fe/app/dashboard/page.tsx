@@ -139,6 +139,16 @@ export default function DashboardPage() {
           ))}
         </div>
 
+        {/* Export */}
+        <div className="flex justify-end">
+          <a
+            href={`/api/export?${filter ? `result=${filter}` : ''}`}
+            className="px-4 py-2 rounded-lg text-sm font-medium bg-green-600 hover:bg-green-700 text-white transition-colors"
+          >
+            Export Excel
+          </a>
+        </div>
+
         {/* Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {loading ? (

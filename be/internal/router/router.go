@@ -28,6 +28,8 @@ func Setup(db *gorm.DB) *gin.Engine {
 		configHandler := handler.NewConfigHandler(db)
 		protected.Use(middleware.RequireAuth())
 		{
+			exportHandler := handler.NewExportHandler(db)
+			protected.GET("/screenings/export", exportHandler.ExportExcel)
 			protected.GET("/screenings", screeningHandler.ListAll)
 			protected.GET("/dashboard/stats", screeningHandler.GetStats)
 			protected.GET("/config", configHandler.GetAll)
@@ -47,6 +49,6 @@ func Setup(db *gorm.DB) *gin.Engine {
 		AllowHeaders:     []string{"Content-Type"},
 		AllowCredentials: true,
 	}))
-	
+
 	return r
 }
