@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import Image from 'next/image'
 
 interface Screening {
   id: string
@@ -78,9 +79,12 @@ export default function DashboardPage() {
 
       {/* Header */}
       <div className="bg-blue-900 text-white px-6 py-4 flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-bold">SIMAE TB</h1>
-          <p className="text-blue-200 text-xs">Dashboard Petugas</p>
+        <div className="flex items-center gap-3">
+          <Image src="/logo.png" alt="Logo Lanal Cilacap" width={40} height={40} className="rounded-full" loading="eager" />
+          <div>
+            <h1 className="text-lg font-bold">SIMAE TB</h1>
+            <p className="text-blue-200 text-xs">Dashboard Petugas</p>
+          </div>
         </div>
         <div className="flex gap-3">
           <button

@@ -5,7 +5,9 @@
       "Bash(npx tsc:*)",
       "Bash(xargs kill:*)",
       "Bash(pkill -f \"npm run dev\")",
-      "Bash(pkill -f \"next dev\")"
+      "Bash(pkill -f \"next dev\")",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(echo \"exit:$?\")"
     ]
   }
 }
