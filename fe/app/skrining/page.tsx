@@ -45,7 +45,7 @@ export default function SkriningPage() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      const res = await fetch("/api/screening", {
+      const res = await fetch("/api/screenings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -76,7 +76,7 @@ export default function SkriningPage() {
             </label>
             <input
               {...register("name")}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Masukkan nama lengkap"
             />
             {errors.name && (
@@ -90,7 +90,7 @@ export default function SkriningPage() {
             </label>
             <input
               {...register("phone")}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="08xxxxxxxxxx"
               type="tel"
             />

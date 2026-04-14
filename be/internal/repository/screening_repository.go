@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/AZEINMU1911/simae-tb/internal/model"
 	"gorm.io/gorm"
 )
@@ -52,3 +54,24 @@ func (r *ScreeningRepository) ListAll(result string, from string, to string, pag
 
 	return screenings, total, nil
 }
+
+type StatsResult struct {
+	Total       int64 `json:"total"`
+	TotalSuspek int64 `json:"total_suspek"`
+	TotalRendah int64 `json:"total_risiko_rendah"`
+	TodayTotal  int64 `json:"today_total"`
+	TodaySuspek int64 `json:"today_suspek"`
+}
+
+func (r *ScreeningRepository) GetStats() (StatsResult, error) {
+	var stats StatsResult
+
+	r.db.Model(&model.Screening{}).Count(&stats.Total)
+	r.db.Model(&model.Screening{}).Where("result = ?", "suspek").Count(&stats.TotalSuspek)
+	r.db.Model(&model.Screening{}).Where("result = ?", "risiko_rendah").Count(&stats.TotalRendah)
+	r.db.Model(&model.Screening{}).Where("created_at >= ?", time.Now().Truncate(24*time.Hour)).Count(&stats.TodayTotal)
+	r.db.Model(&model.Screening{}).Where("result = ? AND created_at >= ?", "suspek", time.Now().Truncate(24*time.Hour)).Count(&stats.TodaySuspek)
+
+	return stats, nil
+}
+
