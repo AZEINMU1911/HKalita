@@ -91,3 +91,7 @@ func (s *ScreeningService) GetByID(id string) (*model.Screening, error) {
 func (s *ScreeningService) ListAll(result string, from string, to string, page int, limit int) ([]model.Screening, int64, error) {
 	return s.repo.ListAll(result, from, to, page, limit)
 }
+
+func (s *ScreeningService) GetStats() (repository.StatsResult, error) {
+	return s.repo.GetStats()
+}

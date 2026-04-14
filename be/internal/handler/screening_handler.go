@@ -31,15 +31,21 @@ func (h *ScreeningHandler) Submit(c *gin.Context) {
 		return
 	}
 
+	requiredKeys := []string{"q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9"}
+	for _, key := range requiredKeys {
+		if _, ok := req.Answers[key]; !ok {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Semua pertanyaan harus dijawab"})
+			return
+		}
+	}
+
 	screening, err := h.service.Submit(req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save screening"})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"data": screening,
-	})
+	c.JSON(http.StatusCreated, gin.H{"data": screening})
 }
 
 func (h *ScreeningHandler) GetByID(c *gin.Context) {
@@ -91,4 +97,13 @@ func (h *ScreeningHandler) ListAll(c *gin.Context) {
 			"limit": limit,
 		},
 	})
+}
+
+func (h *ScreeningHandler) GetStats(c *gin.Context) {
+	stats, err := h.service.GetStats()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch stats"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": stats})
 }

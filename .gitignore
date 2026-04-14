@@ -5,3 +5,7 @@ fe/.env.local
 # generated reports (keep the prompt files)
 reports
 .env
+
+cookies.txt
+
+.DS_Store
