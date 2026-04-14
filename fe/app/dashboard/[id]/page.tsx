@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { cookies } from "next/headers";
+import Image from "next/image";
 
 const API_BASE = process.env.API_BASE_URL ?? "http://localhost:8080";
 
@@ -42,9 +43,12 @@ export default async function DashboardDetailPage({
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <div className="bg-blue-900 text-white px-6 py-4">
-        <h1 className="text-lg font-bold">SIMAE TB</h1>
-        <p className="text-blue-200 text-xs">Detail Skrining</p>
+      <div className="bg-blue-900 text-white px-6 py-4 flex items-center gap-3">
+        <Image src="/logo.png" alt="Logo Lanal Cilacap" width={40} height={40} className="rounded-full" loading="eager" />
+        <div>
+          <h1 className="text-lg font-bold">SIMAE TB</h1>
+          <p className="text-blue-200 text-xs">Detail Skrining</p>
+        </div>
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-4">

@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const schema = z.object({
   phone: z.string().min(8, "Nomor HP tidak valid"),
@@ -42,8 +43,10 @@ export default function LoginPage() {
     <main className="min-h-screen bg-gradient-to-br from-blue-900 to-blue-600 flex items-center justify-center p-4">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-6">
         <div className="text-center mb-8">
+          <Image src="/logo.png" alt="Logo Lanal Cilacap" width={80} height={80} className="mx-auto mb-3 rounded-full" loading="eager" />
           <h1 className="text-2xl font-bold text-blue-900">SIMAE TB</h1>
           <p className="text-gray-500 text-sm mt-1">Portal Petugas Kesehatan</p>
+          <p className="text-gray-400 text-xs">Balai Kesehatan TNI AL Lanal Cilacap</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
