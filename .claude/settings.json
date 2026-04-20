@@ -8,7 +8,8 @@
       "Bash(pkill -f \"next dev\")",
       "Bash(node_modules/.bin/tsc --noEmit)",
       "Bash(echo \"exit:$?\")",
-      "WebFetch(domain:api.anthropic.com)"
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(go build *)"
     ]
   }
 }

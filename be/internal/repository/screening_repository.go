@@ -63,6 +63,10 @@ type StatsResult struct {
 	TodaySuspek int64 `json:"today_suspek"`
 }
 
+func (r *ScreeningRepository) DeleteByID(id string) error {
+	return r.db.Delete(&model.Screening{}, "id = ?", id).Error
+}
+
 func (r *ScreeningRepository) GetStats() (StatsResult, error) {
 	var stats StatsResult
 

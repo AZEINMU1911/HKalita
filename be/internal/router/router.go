@@ -31,6 +31,7 @@ func Setup(db *gorm.DB) *gin.Engine {
 			exportHandler := handler.NewExportHandler(db)
 			protected.GET("/screenings/export", exportHandler.ExportExcel)
 			protected.GET("/screenings", screeningHandler.ListAll)
+			protected.DELETE("/screening/:id", screeningHandler.DeleteByID)
 			protected.GET("/dashboard/stats", screeningHandler.GetStats)
 			protected.GET("/config", configHandler.GetAll)
 			protected.PUT("/config", configHandler.Update)
