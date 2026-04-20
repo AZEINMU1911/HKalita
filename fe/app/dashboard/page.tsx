@@ -28,6 +28,11 @@ interface Meta {
   limit: number
 }
 
+interface DeleteTarget {
+  id: string
+  name: string
+}
+
 export default function DashboardPage() {
   const router = useRouter()
   const [stats, setStats] = useState<Stats | null>(null)
@@ -36,6 +41,8 @@ export default function DashboardPage() {
   const [filter, setFilter] = useState('')
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(true)
+  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null)
+  const [deleting, setDeleting] = useState(false)
 
   const fetchStats = async () => {
     const res = await fetch('/api/dashboard/stats')
@@ -66,6 +73,24 @@ export default function DashboardPage() {
     init()
   }, [filter, page])
 
+  const confirmDelete = async () => {
+    if (!deleteTarget) return
+    setDeleting(true)
+    try {
+      const res = await fetch(`/api/screenings/${deleteTarget.id}`, { method: 'DELETE' })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error)
+      toast.success('Data berhasil dihapus')
+      setDeleteTarget(null)
+      await fetchScreenings(filter, page)
+      await fetchStats()
+    } catch {
+      toast.error('Gagal menghapus data')
+    } finally {
+      setDeleting(false)
+    }
+  }
+
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' })
     toast.success('Berhasil keluar')
@@ -76,6 +101,36 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
+
+      {/* Delete confirmation modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-6">
+            <h2 className="text-base font-semibold text-gray-800 mb-2">Hapus Data Skrining</h2>
+            <p className="text-sm text-gray-500 mb-6">
+              Yakin ingin menghapus data skrining milik{' '}
+              <span className="font-medium text-gray-800">{deleteTarget.name}</span>?
+              Tindakan ini tidak dapat dibatalkan.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                disabled={deleting}
+                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
+              >
+                Batal
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={deleting}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors disabled:opacity-50"
+              >
+                {deleting ? 'Menghapus...' : 'Hapus'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Header */}
       <div className="bg-blue-900 text-white px-6 py-4 flex items-center justify-between">
@@ -190,12 +245,20 @@ export default function DashboardPage() {
                       {new Date(s.created_at).toLocaleDateString('id-ID', { dateStyle: 'medium' })}
                     </td>
                     <td className="px-4 py-3">
-                      <button
-                        onClick={() => router.push(`/dashboard/${s.id}`)}
-                        className="text-blue-600 hover:text-blue-800 text-xs font-medium"
-                      >
-                        Detail
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => router.push(`/dashboard/${s.id}`)}
+                          className="text-blue-600 hover:text-blue-800 text-xs font-medium"
+                        >
+                          Detail
+                        </button>
+                        <button
+                          onClick={() => setDeleteTarget({ id: s.id, name: s.name })}
+                          className="text-red-500 hover:text-red-700 text-xs font-medium"
+                        >
+                          Hapus
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -92,6 +92,10 @@ func (s *ScreeningService) ListAll(result string, from string, to string, page i
 	return s.repo.ListAll(result, from, to, page, limit)
 }
 
+func (s *ScreeningService) DeleteByID(id string) error {
+	return s.repo.DeleteByID(id)
+}
+
 func (s *ScreeningService) GetStats() (repository.StatsResult, error) {
 	return s.repo.GetStats()
 }

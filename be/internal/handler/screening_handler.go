@@ -99,6 +99,16 @@ func (h *ScreeningHandler) ListAll(c *gin.Context) {
 	})
 }
 
+func (h *ScreeningHandler) DeleteByID(c *gin.Context) {
+	id := c.Param("id")
+	err := h.service.DeleteByID(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal menghapus data"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": gin.H{"message": "Data berhasil dihapus"}})
+}
+
 func (h *ScreeningHandler) GetStats(c *gin.Context) {
 	stats, err := h.service.GetStats()
 	if err != nil {
